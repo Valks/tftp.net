@@ -53,7 +53,7 @@ namespace Tftp.Net.Transfer.States
         private void SendAcknowledgement(ushort blockNumber)
         {
             Acknowledgement ack = new Acknowledgement(blockNumber);
-            Context.GetConnection().Send(ack);
+            Context.GetConnection().SendAsync(ack).RunSynchronously();
             ResetTimeout();
         }
     }

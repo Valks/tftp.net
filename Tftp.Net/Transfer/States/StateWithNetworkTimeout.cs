@@ -38,13 +38,13 @@ namespace Tftp.Net.Transfer.States
         {
             if (lastCommand != null)
             {
-                Context.GetConnection().Send(lastCommand);
+                Context.GetConnection().SendAsync(lastCommand).RunSynchronously();
             }
         }
 
         protected void SendAndRepeat(ITftpCommand command)
         {
-            Context.GetConnection().Send(command);
+            Context.GetConnection().SendAsync(command).RunSynchronously();
             lastCommand = command;
             ResetTimeout();
         }

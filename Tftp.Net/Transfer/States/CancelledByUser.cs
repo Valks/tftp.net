@@ -17,7 +17,7 @@ namespace Tftp.Net.Transfer.States
         public override void OnStateEnter()
         {
             Error command = new Error(reason.ErrorCode, reason.ErrorMessage);
-            Context.GetConnection().Send(command);
+            Context.GetConnection().SendAsync(command).RunSynchronously();
             Context.SetState(new Closed());
         }
     }

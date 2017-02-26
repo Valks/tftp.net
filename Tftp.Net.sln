@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Tftp.Net", "Tftp.Net\Tftp.Net.xproj", "{430D4EBB-940E-4752-AAA6-65C6501A4FE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tftp.Net.UnitTests", "Tftp.Net.UnitTests\Tftp.Net.UnitTests.csproj", "{F0CB1294-5E21-4CC2-9E3F-7AA7F70C7F1C}"
-EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Tftp.Net.SampleClient", "Tftp.Net.SampleClient\Tftp.Net.SampleClient.xproj", "{87B100C7-0338-4953-9383-D6787DD3814D}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Tftp.Net.SampleServer", "Tftp.Net.SampleServer\Tftp.Net.SampleServer.xproj", "{9352759B-69C0-4D71-A88F-4C6366654DF9}"
@@ -21,9 +19,6 @@ Global
 		{430D4EBB-940E-4752-AAA6-65C6501A4FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{430D4EBB-940E-4752-AAA6-65C6501A4FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{430D4EBB-940E-4752-AAA6-65C6501A4FE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F0CB1294-5E21-4CC2-9E3F-7AA7F70C7F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F0CB1294-5E21-4CC2-9E3F-7AA7F70C7F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F0CB1294-5E21-4CC2-9E3F-7AA7F70C7F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87B100C7-0338-4953-9383-D6787DD3814D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87B100C7-0338-4953-9383-D6787DD3814D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87B100C7-0338-4953-9383-D6787DD3814D}.Release|Any CPU.ActiveCfg = Release|Any CPU
