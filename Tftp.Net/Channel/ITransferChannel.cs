@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Tftp.Net.Channel
 {
@@ -17,6 +18,6 @@ namespace Tftp.Net.Channel
         EndPoint RemoteEndpoint { get; set; }
 
         void Open();
-        void Send(ITftpCommand command);
+        Task SendAsync(ITftpCommand command);
     }
 }

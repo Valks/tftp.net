@@ -8,11 +8,11 @@ using System.Net;
 
 namespace Tftp.Net.SampleClient
 {
-    class Program
+    public class Program
     {
         private static AutoResetEvent TransferFinishedEvent = new AutoResetEvent(false);
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //Setup a TftpClient instance
             var client = new TftpClient("localhost");

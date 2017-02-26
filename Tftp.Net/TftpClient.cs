@@ -62,7 +62,7 @@ namespace Tftp.Net
         /// <param name="port">Port to connect to</param>
         public TftpClient(String host, int port)
         {
-            IPAddress ip = Dns.GetHostAddresses(host).FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+            IPAddress ip = Dns.GetHostAddressesAsync(host).Result.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
 
             if (ip == null)
                 throw new ArgumentException("Could not convert '" + host + "' to an IPv4 address.", "host");

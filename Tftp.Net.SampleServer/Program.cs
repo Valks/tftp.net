@@ -8,13 +8,13 @@ using System.Net;
 
 namespace Tftp.Net.SampleServer
 {
-    class Program
+    public class Program
     {
         private static String ServerDirectory;
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            ServerDirectory = Environment.CurrentDirectory;
+            ServerDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             Console.WriteLine("Running TFTP server for directory: " + ServerDirectory);
             Console.WriteLine();
@@ -50,7 +50,7 @@ namespace Tftp.Net.SampleServer
             FileInfo file = new FileInfo(path);
 
             //Is the file within the server directory?
-            if (!file.FullName.StartsWith(ServerDirectory, StringComparison.InvariantCultureIgnoreCase))
+            if (!file.FullName.StartsWith(ServerDirectory, StringComparison.CurrentCultureIgnoreCase))
             {
                 CancelTransfer(transfer, TftpErrorPacket.AccessViolation);
             }

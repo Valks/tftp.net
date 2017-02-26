@@ -196,7 +196,7 @@ namespace Tftp.Net.Transfer
 
                 if (InputOutputStream != null)
                 {
-                    InputOutputStream.Close();
+                    InputOutputStream.Dispose();
                     InputOutputStream = null;
                 }
 

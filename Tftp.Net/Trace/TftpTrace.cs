@@ -26,7 +26,7 @@ namespace Tftp.Net.Trace
             if (!Enabled)
                 return;
 
-            System.Diagnostics.Trace.WriteLine(message, transfer.ToString());
+            System.Diagnostics.Debug.WriteLine(message, transfer.ToString());
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Tftp.Net.Transfer;
+using System.Runtime.Serialization;
 
 namespace Tftp.Net
 {
@@ -158,7 +159,7 @@ namespace Tftp.Net
         }
     }
 
-    [Serializable]
+    [DataContract]
     class TftpParserException : Exception
     {
         public TftpParserException(String message)

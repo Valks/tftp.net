@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Tftp.Net.Channel
 {
@@ -19,58 +21,55 @@ namespace Tftp.Net.Channel
         private readonly CommandSerializer serializer = new CommandSerializer();
         private readonly CommandParser parser = new CommandParser();
 
+        private readonly CancellationTokenSource cts;
+        private Task _listener = null;
+
         public UdpChannel(UdpClient client)
         {
             this.client = client;
             this.endpoint = null;
+            this.cts = new CancellationTokenSource();
         }
 
         public void Open()
         {
             if (client == null)
                 throw new ObjectDisposedException("UdpChannel");
+            if (_listener != null)
+                throw new Exception("Socket already open");
 
-            client.BeginReceive(UdpReceivedCallback, null);
+            _listener = ListenAsync(cts.Token);
+            _listener.Start();
         }
 
-        void UdpReceivedCallback(IAsyncResult result)
+        private async Task ListenAsync(CancellationToken token)
         {
             IPEndPoint endpoint = new IPEndPoint(0, 0);
             ITftpCommand command = null;
+            UdpReceiveResult response;
 
-            try
+            while(!token.IsCancellationRequested)
             {
-                byte[] data = null;
-
-                lock (this)
+                try
                 {
-                    if (client == null)
-                        return;
-
-                    data = client.EndReceive(result, ref endpoint);
+                    response = await client.ReceiveAsync().ConfigureAwait(continueOnCapturedContext: false);
+                    command = parser.Parse(response.Buffer);
                 }
-                command = parser.Parse(data);
-            }
-            catch (SocketException e)
-            {
-                //Handle receive error
-                RaiseOnError(new NetworkError(e));
-            }
-            catch (TftpParserException e2)
-            {
-                //Handle parser error
-                RaiseOnError(new NetworkError(e2));
-            }
+                catch (SocketException e)
+                {
+                    //Handle receive error
+                    RaiseOnError(new NetworkError(e));
+                }
+                catch (TftpParserException e2)
+                {
+                    //Handle parser error
+                    RaiseOnError(new NetworkError(e2));
+                }
 
-            if (command != null)
-            {
-                RaiseOnCommand(command, endpoint);
-            }
-
-            lock (this)
-            {
-                if (client != null)
-                    client.BeginReceive(UdpReceivedCallback, null);
+                if (command != null)
+                {
+                    RaiseOnCommand(command, endpoint);
+                }
             }
         }
 
@@ -86,7 +85,7 @@ namespace Tftp.Net.Channel
                 OnError(error);
         }
 
-        public void Send(ITftpCommand command)
+        public async Task SendAsync(ITftpCommand command)
         {
             if (client == null)
                 throw new ObjectDisposedException("UdpChannel");
@@ -97,8 +96,15 @@ namespace Tftp.Net.Channel
             using (MemoryStream stream = new MemoryStream())
             {
                 serializer.Serialize(command, stream);
-                byte[] data = stream.GetBuffer();
-                client.Send(data, (int)stream.Length, endpoint);
+                ArraySegment<byte> data;
+                if (stream.TryGetBuffer(out data))
+                {
+                    await client.SendAsync(data.Array, (int)stream.Length, endpoint);
+                }
+                else
+                {
+                    throw new InvalidDataException("Problem getting buffer from memory stream.");
+                }
             }
         }
 
@@ -109,7 +115,8 @@ namespace Tftp.Net.Channel
                 if (this.client == null)
                     return;
 
-                client.Close();
+                cts.Cancel();
+                client.Dispose();
                 this.client = null;
             }
         }
